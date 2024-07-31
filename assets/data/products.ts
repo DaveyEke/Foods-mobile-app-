@@ -4,7 +4,6 @@ const products = [
     name: 'Ultimate Pepperoni',
     image:
        'https://i.ibb.co/CBYzyKh/Video-1.png',
-      // 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/peperoni.png',
     price: 12.99,
   },
   {
