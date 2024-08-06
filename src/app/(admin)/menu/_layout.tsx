@@ -7,7 +7,7 @@ export default function MenuStack () {
     return <Stack>
         <Stack.Screen name="index" options={{ title: "Menu" ,  headerRight: () => (
           // Remember to redirect to the create screen
-            <Link href="/cart" asChild>
+            <Link href="../../(admin)/menu/create" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -35,6 +35,8 @@ export default function MenuStack () {
               </Pressable>
             </Link>
           ),}} />
+          // Remember to make this a modal screen if you wanna
+          <Stack.Screen name="create" options={{ presentation: 'modal' }} />
     </Stack>;
 }
 
