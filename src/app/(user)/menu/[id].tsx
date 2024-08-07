@@ -6,10 +6,12 @@ import { defaultPizzaImage } from '@/src/components/ProductListItem';
 import { useState } from 'react';
 import { red } from 'react-native-reanimated/lib/typescript/reanimated2/Colors';
 import Button from '@/src/components/Button';
-import Colors from '@/src/constants/Colors';
+
 import { useCart } from '@/src/providers/CartProvider';
 import { PizzaSize } from '@/src/types';
 import { router } from 'expo-router';
+import { Link } from 'expo-router';
+
 
 
 const sizes: PizzaSize[] = ['S', 'M','L','XL'];
