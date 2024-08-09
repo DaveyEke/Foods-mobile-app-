@@ -2,6 +2,7 @@ import { Product } from '../types'
 import { StyleSheet , Text , View , Image , Pressable} from 'react-native';
 import Colors from '../constants/Colors';
 import { Link, useSegments } from 'expo-router';
+import { Redirect } from 'expo-router';
 
 
 
@@ -24,6 +25,7 @@ const ProductListItem = ({ product }: ProductListItemProps ) => {
       />
      <Text style={styles.title}>{product.name}</Text>
      <Text style={styles.price}>${product.price}</Text>
+     <Link style={styles.returnText}href={'/(user)/orders/index'}>Return</Link>
     </Pressable>
     </Link>
   );
@@ -62,6 +64,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color : Colors.light.tint
   },
+
+  returnText:{
+    fontSize: 25,
+    fontWeight:'bold'
+  }
 
 
   

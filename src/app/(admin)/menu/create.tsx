@@ -126,9 +126,10 @@ const CreateProductScreen = () => {
         errors ? <Text style={{ color : 'red' }}>{errors}</Text> : null
       }
       <Button onPress={onSubmit} text={ isUpdating ? 'Update' : 'Create'} /> 
-      { isUpdating && <Text  onPress={confirmDelete} style={styles.textButton}>Delete</Text>}
+      { isUpdating && <Text  onPress={confirmDelete} style={[styles.textButton ]}>Delete</Text>}
     </View>
   )
+  
 }
 
 const styles  =StyleSheet.create({
