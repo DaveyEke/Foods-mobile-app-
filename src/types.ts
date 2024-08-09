@@ -30,8 +30,9 @@ export type Order = {
   total: number;
   user_id: string;
   status: OrderStatus;
-  order_items:OrderItem[];
+  order_items?:OrderItem[];
   // original code that's breaking my code "order_items?: OrderItem[];""
+  // edit : the above code wasn't the source of my problem i've fixed it already
 };
 
 export type OrderItem = {

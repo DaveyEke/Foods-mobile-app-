@@ -25,7 +25,6 @@ const ProductListItem = ({ product }: ProductListItemProps ) => {
       />
      <Text style={styles.title}>{product.name}</Text>
      <Text style={styles.price}>${product.price}</Text>
-     <Link style={styles.returnText}href={'/(user)/orders/index'}>Return</Link>
     </Pressable>
     </Link>
   );

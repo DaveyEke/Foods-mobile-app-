@@ -6,6 +6,7 @@ import { Pressable } from 'react-native'
 import orders from '@/assets/data/orders'
 import { Order } from '../types'
 import dayjs from 'dayjs'
+import Colors from '../constants/Colors'
 
 
 type OrderListItemProps = {

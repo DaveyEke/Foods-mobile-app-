@@ -54,7 +54,7 @@ const signIn = () => {
         <Text style={styles.textAbove}>Email:</Text>
         <TextInput 
         style={styles.input}
-        placeholder='your-name@gmail.com'
+        placeholder='your-email@example.com'
         value = {email}
         onChangeText={setEmail}
         />
