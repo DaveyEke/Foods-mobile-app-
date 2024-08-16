@@ -1,7 +1,8 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
+import { Link, Redirect, Tabs } from 'expo-router';
 import { Pressable } from 'react-native';
+import { useAuth } from '@/src/providers/AuthProvider';
 
 import Colors from '@/src/constants/Colors';
 import { useColorScheme } from '@/src/components/useColorScheme';
@@ -17,7 +18,11 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { session }  = useAuth();
 
+  if (!session) {
+    return <Redirect href={'/'}  />
+  }
   return (
     <Tabs
       screenOptions={{
@@ -52,6 +57,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+      // Pixel 8 Pro API TiramisuPrivacySandbox
         name="orders"
         options={{
           headerShown : false,
@@ -62,3 +68,4 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+ 

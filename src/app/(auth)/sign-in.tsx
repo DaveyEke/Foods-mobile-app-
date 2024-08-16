@@ -5,12 +5,30 @@ import Button from '@/src/components/Button'
 import Colors from '@/src/constants/Colors'
 import { Redirect } from 'expo-router'
 import { useState } from 'react'
+import { useSegments } from 'expo-router'
+import { supabase } from '@/src/lib/supabase'
 
 
-const signIn = () => {
+
+const signInScreen = () => {
+    const segments = useSegments();
     const [ email , setEmail ] = useState('');
     const [ password , setPassword ] = useState('')
     const [ errors , setErrors ] = useState('')
+    const [loading , setLoading] = useState(false)
+    console.log(segments)
+    
+
+    async function signInWithEmail () {
+        setLoading(true);
+        const { error }= await supabase.auth.signInWithPassword({email,password});
+        if (error) Alert.alert(error.message)
+        if (!error) Alert.alert("Success" , "You've been signed in Successfully")
+        setLoading(false)
+        
+        
+       
+      }
 
     const resetFields = () => {
         setErrors('')
@@ -18,34 +36,7 @@ const signIn = () => {
         setPassword('')
     }
     
-    
-    const validateInput = () => {
-        if (!email && !password ) {
-            setErrors("Pls fill in the blanks!")
-            return false;
-        } 
-
-        if (!email){
-            setErrors("Pls type in your Email")
-            return false;
-        } 
-        if (!password) {
-            setErrors("Pls input your Password")
-            return false;
-        } 
-
-        return true;
-    }
-    const onSubmit = () => {
-        if(!validateInput()){
-            return;
-        } else {
-            Alert.alert("Success!", "You have been signed in Successfully")
-            resetFields();
-        }
-      
-
-    }
+   
 
 
   return (
@@ -62,7 +53,7 @@ const signIn = () => {
         <TextInput secureTextEntry  placeholder='********' style={styles.input} value={password} onChangeText={setPassword} />
         <Text style={[styles.textAbove, { color : 'red'}]}>{errors}</Text>
 
-        <Button onPress={onSubmit} text='Sign In'/>
+        <Button onPress={signInWithEmail} disabled={loading} text={loading ? 'Signing you in...' : 'Sign In'}/>
         <Link href='/sign-up' style={styles.text}>Create an Account</Link>
     </View>
   )
@@ -99,4 +90,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default signIn
+export default signInScreen

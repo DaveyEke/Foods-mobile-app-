@@ -4,7 +4,7 @@ import { FlatList } from 'react-native'
 import orders from '@/assets/data/orders'
 import OrderListItem from '@/src/components/OrderListItem'
 
-const index = () => {
+const OrderScreen = () => {
   return (
     <FlatList
       data={orders}
@@ -20,4 +20,4 @@ const styles =StyleSheet.create({
     }
 })
 
-export default index
+export default OrderScreen;

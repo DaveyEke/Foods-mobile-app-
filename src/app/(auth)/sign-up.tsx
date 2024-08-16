@@ -6,61 +6,38 @@ import Colors from '@/src/constants/Colors'
 import { Redirect } from 'expo-router'
 import { useState } from 'react'
 import { Alert } from 'react-native'
+import { supabase } from '@/src/lib/supabase'
 
 
-const signIn = () => {
+const SignUpScreen = () => {
+    
   const [ email , setEmail ] = useState('');
   const [ password , setPassword ] = useState('')
   const [ errors , setErrors ] = useState('')
+  const [loading , setLoading] = useState(false)
 
-  const resetFields = () => {
-    setErrors('')
-    setEmail('')
-    setPassword('')
-}
-
-
-const validateInput = () => {
-    if (!email && !password ) {
-        setErrors("Pls fill in the blanks!")
-        return false;
-    } 
-
-    if (!email){
-        setErrors("Pls type in your Email")
-        return false;
-    } 
-    if (!password) {
-        setErrors("Pls input your Password")
-        return false;
-    } 
-
-    return true;
-}
-const onSubmit = () => {
-    if(!validateInput()){
-        return;
-    } else {
-        Alert.alert("Success!", "You have been signed in Successfully")
-        resetFields();
-    }
+  async function signUpWithEmail () {
+    setLoading(true);
+    const { error }= await supabase.auth.signUp({email,password});
+    if (error) Alert.alert(error.message)
+        setLoading(false)
+   
+  }
   
-
-}
   return (
     <View style={styles.container}>
         <Stack.Screen  options={{ title: "Sign Up" }} />
         <Text style={styles.textAbove}>Email:</Text>
         <TextInput 
         style={styles.input}
-        placeholder='your-name@gmail.com'
+        placeholder='your-email@gmail.com'
         value = {email}
         onChangeText={setEmail}
         />
         <Text style={styles.textAbove}>Password:</Text>
         <TextInput placeholder='********' secureTextEntry  style={styles.input} value={password} onChangeText={setPassword}/>
         <Text style={[styles.textAbove, { color : 'red'}]}>{errors}</Text>
-        <Button onPress={onSubmit} text='Create account'/>
+        <Button onPress={signUpWithEmail} disabled={loading} text={loading ?  'Creating account...hold on' : 'Create account'}/>
         <Link href='/sign-in' style={styles.text}>Sign In</Link>
         
     </View>
@@ -96,4 +73,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default signIn
+export default SignUpScreen
