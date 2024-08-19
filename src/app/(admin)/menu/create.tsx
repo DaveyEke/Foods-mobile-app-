@@ -1,12 +1,20 @@
 import { View, Text , StyleSheet, TextInput, Alert} from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Button from '@/src/components/Button'
 import { useState } from 'react'
 import { Image } from 'react-native'
 import { defaultPizzaImage } from '@/src/components/ProductListItem'
 import Colors from '@/src/constants/Colors'
 import * as ImagePicker from 'expo-image-picker'
-import { Stack, useLocalSearchParams } from 'expo-router'
+import { router, Stack, useLocalSearchParams } from 'expo-router'
+import { useInsertProduct, useProduct, useProductList } from '@/src/api/products'
+import { Router } from 'expo-router'
+import { useUpdateProduct } from '@/src/api/products'
+import { useDeleteProduct } from '@/src/api/products'
+import { ActivityIndicator } from 'react-native'
+import { Modal } from 'react-native'
+import { useQueryClient } from '@tanstack/react-query'
+
 
 const CreateProductScreen = () => {
 
@@ -15,11 +23,26 @@ const CreateProductScreen = () => {
   const [errors , setErrors] = useState('');
   const [image, setImage] = useState('');
 
-  const { id } = useLocalSearchParams();
+  const { id:idString } = useLocalSearchParams();
+  const id = parseFloat(typeof idString === 'string' ? idString : idString?.[0]);
 
   const isUpdating = !!id;
 
-  const resetFileds = () => {
+  const { mutate: insertProduct} = useInsertProduct();
+  const { mutate: updateProduct } = useUpdateProduct();
+  const {data : updatingProduct} = useProduct(id);
+  const { mutate : deleteProduct , isPending } = useDeleteProduct();
+
+
+  useEffect(()=> {
+    if (updatingProduct){
+      setName(updatingProduct.name)
+      setPrice(updatingProduct.price.toString())
+      setImage(updatingProduct.image)
+    }
+  }, [updatingProduct])
+
+   const resetFileds = () => {
     setName(''),
     setPrice('')
   }
@@ -44,10 +67,19 @@ const CreateProductScreen = () => {
 
   const onSubmit = () => {
     if (isUpdating) {
-      onUpdateCreate();
+      onUpdate();
     } else {
       onCreate();
     }
+  }
+  
+  function LoadingAnimation() {
+    return (
+      <View style={styles.indicatorWrapper}>
+        <ActivityIndicator size="large" style={styles.indicator}/>
+        <Text style={styles.indicatorText}>{`Creating Product...${name} with Price $${price}`}</Text>
+      </View>
+    );
   }
 
   const onCreate = () => {
@@ -55,23 +87,43 @@ const CreateProductScreen = () => {
       Alert.alert(`${errors}`)
       return;
     }
-    Alert.alert(`Creating Product...${name} with Price $${price}`)
+
+   
+    
+    // Alert.alert(`Creating Product...${name} with Price $${price}`)
 
     // save in the database 
+    insertProduct({name , price: parseFloat(price) , image}, {
+      onSuccess : () => {
+        Alert.alert("Success", "Product created successfully")
+        resetFileds()
+        router.back()
+      }
+    })
     setErrors('')
-    resetFileds();
   };
 
-  const onUpdateCreate = () => {
+  const onUpdate = () => {
     Alert.alert(`${errors}`)
     if (!validateInput()) {
       return;
     }
     Alert.alert(`Updating Product...${name} with Price $${price}`)
-
     // save in the database 
+    updateProduct(
+      {id , name , price: parseFloat(price), image} , {
+        onSuccess: () => {
+          resetFileds();
+          Alert.alert("Success", "This product has been updated successfully")
+          router.back();
+        }
+      }
+    );
+    
+
+    
     setErrors('')
-    resetFileds();
+    
   };
 
 
@@ -91,7 +143,13 @@ const CreateProductScreen = () => {
   }
 
   const onDelete = () => {
-    Alert.alert("DELETEEEE!!")
+      deleteProduct(id,  {onSuccess : () => {
+      resetFileds();
+      if (isPending){
+          <LoadingAnimation />
+      }
+      router.replace('/(admin)');
+    }});
   };
   const confirmDelete = () => {
     Alert.alert("Confirm","You're gonna delete this product!", [
@@ -164,7 +222,17 @@ const styles  =StyleSheet.create({
       fontWeight: 'bold',
       color : Colors.light.tint,
       marginVertical: 10,
-    }
+    }, 
+    indicatorWrapper: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    indicator: {},
+    indicatorText: {
+      fontSize: 18,
+      marginTop: 12,
+    },
 })
 
 

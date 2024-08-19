@@ -6,23 +6,25 @@ import { defaultPizzaImage } from '@/src/components/ProductListItem';
 import { useState } from 'react';
 import { red } from 'react-native-reanimated/lib/typescript/reanimated2/Colors';
 import Button from '@/src/components/Button';
-
+import { useProduct } from '@/src/api/products';
 import { useCart } from '@/src/providers/CartProvider';
 import { PizzaSize } from '@/src/types';
 import { router } from 'expo-router';
 import { Link } from 'expo-router';
+import { ActivityIndicator } from 'react-native';
 
 
 
 const sizes: PizzaSize[] = ['S', 'M','L','XL'];
 
 const ProductDetailsScreen = () => {
-  const { id } = useLocalSearchParams()
+  const { id : idString } = useLocalSearchParams()
+  const id = parseFloat(typeof idString === 'string' ? idString : idString[0]);
+  const { data : product, error, isLoading} = useProduct(id);
+
   const { addItem } = useCart();
 
   const [selectedSize , setSelectedSize] = useState<PizzaSize>('M');
-
-  const product = products.find((p) => p.id.toString() === id);
 
   const addToCart = () => {
     if (!product){
@@ -31,9 +33,15 @@ const ProductDetailsScreen = () => {
     addItem(product, selectedSize);
     router.push('/cart')
   };
-
+  
+  if (isLoading) {
+    return <ActivityIndicator />;
+   }
+   if (error) {
+    Alert.alert("Error","Failed to fetch products")
+   }
   if (!product) {
-    return <Text>Product not found</Text>
+    return Alert.alert("Error", "Product not found")
   }
 
   return (
