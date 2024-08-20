@@ -17,11 +17,13 @@ import { useQueryClient } from '@tanstack/react-query'
 
 
 const CreateProductScreen = () => {
+  
 
   const [name, setName] = useState('');
   const [price , setPrice] = useState('');
   const [errors , setErrors] = useState('');
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState<string | null>('');
+  const [loading , setLoading] = useState(false)
 
   const { id:idString } = useLocalSearchParams();
   const id = parseFloat(typeof idString === 'string' ? idString : idString?.[0]);
@@ -31,7 +33,7 @@ const CreateProductScreen = () => {
   const { mutate: insertProduct} = useInsertProduct();
   const { mutate: updateProduct } = useUpdateProduct();
   const {data : updatingProduct} = useProduct(id);
-  const { mutate : deleteProduct , isPending } = useDeleteProduct();
+  const { mutate : deleteProduct  } = useDeleteProduct();
 
 
   useEffect(()=> {
@@ -142,12 +144,10 @@ const CreateProductScreen = () => {
    
   }
 
+
   const onDelete = () => {
       deleteProduct(id,  {onSuccess : () => {
       resetFileds();
-      if (isPending){
-          <LoadingAnimation />
-      }
       router.replace('/(admin)');
     }});
   };
