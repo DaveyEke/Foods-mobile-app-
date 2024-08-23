@@ -8,6 +8,7 @@ import { ActivityIndicator } from 'react-native';
 import { Alert } from 'react-native';
 import { RefreshControl } from 'react-native';
 import React from 'react';
+import LoadingAnimation from '@/src/components/loadinganimation';
 
 
 
@@ -16,7 +17,7 @@ export default function MenuScreen() {
 
 
  if (isLoading) {
-  return <ActivityIndicator />;
+  return <LoadingAnimation text="Fetching..." />;
  }
 
  if (error) {

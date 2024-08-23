@@ -36,7 +36,6 @@ export const useProduct = (id : number) => {
 }
 
 export const useInsertProduct = () => {
-
   const queryClient = useQueryClient();
   return useMutation({
     async mutationFn(data:any){
@@ -87,7 +86,7 @@ export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
   return useMutation({
     async mutationFn(id : number) {
-    const {error } = await supabase.from('products').delete().eq('id', id);
+    const { error } = await supabase.from('products').delete().eq('id', id);
      if (error) {
       Alert.alert("Error", "An unexpected error occured while deleting this product")
      }

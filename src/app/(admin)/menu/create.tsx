@@ -14,6 +14,12 @@ import { useDeleteProduct } from '@/src/api/products'
 import { ActivityIndicator } from 'react-native'
 import { Modal } from 'react-native'
 import { useQueryClient } from '@tanstack/react-query'
+import * as FileSystem from 'expo-file-system'
+import { supabase } from '@/src/lib/supabase'
+import { decode } from 'base64-arraybuffer'
+import { randomUUID } from 'expo-crypto'
+import LoadingAnimation from '@/src/components/loadinganimation'
+
 
 
 const CreateProductScreen = () => {
@@ -66,7 +72,7 @@ const CreateProductScreen = () => {
 
     return true;
   };
-
+ 
   const onSubmit = () => {
     if (isUpdating) {
       onUpdate();
@@ -75,30 +81,28 @@ const CreateProductScreen = () => {
     }
   }
   
-  function LoadingAnimation() {
-    return (
-      <View style={styles.indicatorWrapper}>
-        <ActivityIndicator size="large" style={styles.indicator}/>
-        <Text style={styles.indicatorText}>{`Creating Product...${name} with Price $${price}`}</Text>
-      </View>
-    );
-  }
-
-  const onCreate = () => {
+  
+  const onCreate = async () => {
+    setLoading(true)
+    //  if (loading){
+    //   return <LoadingAnimation text={`Creating product with name :${name} and price:${price}`}/>
+    // }
+    
     if (!validateInput()) {
       Alert.alert(`${errors}`)
       return;
     }
 
-   
-    
+
+   const imagePath = await uploadImage();
     // Alert.alert(`Creating Product...${name} with Price $${price}`)
 
     // save in the database 
-    insertProduct({name , price: parseFloat(price) , image}, {
+    insertProduct({name , price: parseFloat(price) , image : imagePath}, {
       onSuccess : () => {
         Alert.alert("Success", "Product created successfully")
         resetFileds()
+        setLoading(false)
         router.back()
       }
     })
@@ -164,6 +168,37 @@ const CreateProductScreen = () => {
     ]);
   };
 
+  const uploadImage = async () => {
+    if (!image?.startsWith('file://')) {
+      return;
+    }
+  
+    const base64 = await FileSystem.readAsStringAsync(image, {
+      encoding: 'base64',
+    });
+    const filePath = `${randomUUID()}.png`;
+    const contentType = 'image/png';
+    const { data, error } = await supabase.storage
+      .from('product-images')
+      .upload(filePath, decode(base64), { contentType });
+  
+      console.log(error);
+
+    if (data) {
+      return data.path;
+    }
+  };
+
+  const textState = (isUpdating : boolean , loading: boolean , name:string) => {
+      if (isUpdating == true) {
+        return "Update";
+      } else if ( loading == true) {
+        return `Creating Product....${name}`;
+      } else {
+        return "Create"
+      }
+  }
+  // isUpdating ? 'Update' : 'Create'
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: isUpdating ? 'Update Product' : 'Create Product'}} />
@@ -183,7 +218,8 @@ const CreateProductScreen = () => {
       {
         errors ? <Text style={{ color : 'red' }}>{errors}</Text> : null
       }
-      <Button onPress={onSubmit} text={ isUpdating ? 'Update' : 'Create'} /> 
+      <Button onPress={onSubmit} disabled={loading} text={textState(isUpdating, loading , name)} /> 
+      
       { isUpdating && <Text  onPress={confirmDelete} style={[styles.textButton ]}>Delete</Text>}
     </View>
   )

@@ -12,17 +12,32 @@ import OrderItemListItem from '@/src/components/OrderItemListItem'
 import { Pressable } from 'react-native'
 import { OrderStatusList } from '@/src/types'
 import Colors from '@/src/constants/Colors'
+import { useOrderDetails, useUpdateOrder } from '@/src/api/orders'
+import LoadingAnimation from '@/src/components/loadinganimation'
 
 
 const OrderItemScreen = () => {
-  const { id } = useLocalSearchParams()
-  const order:any = orders.find((o) => o.id.toString() === id);
+  const { id : idString } = useLocalSearchParams()
+  const id = parseFloat(typeof idString === 'string' ? idString : idString[0]);
+  // const order:any = orders.find((o) => o.id.toString() === id);
+  const {data: order , isLoading ,error} = useOrderDetails(id);
+  const {mutate : updateOrder  } = useUpdateOrder();
+
+  const updateStatus = (status: string) => {
+    updateOrder({ id: id , updatedFields : {status}})
+  }
+  
   const orderItems = order?.order_items
-   if(!order){
-    Alert.alert("Something is Wrong")
-   } else {
-    //  Alert.alert("Success" , `Order with id :  ${order.id} was retrieved successfully!`)
-   }
+
+
+  if (isLoading){
+    return <LoadingAnimation  text="Fetching..."/>
+  }
+
+  if (error || !order){
+    Alert.alert("Error", "Failed to Fetch")
+  }
+
   return (
     <>
     <View style={styles.container}>
@@ -39,7 +54,7 @@ const OrderItemScreen = () => {
     {OrderStatusList.map((status) => (
       <Pressable
         key={status}
-        onPress={() => Alert.alert('Update status')}
+        onPress={() => updateStatus(status)}
         style={{
           borderColor: Colors.light.tint,
           borderWidth: 1,

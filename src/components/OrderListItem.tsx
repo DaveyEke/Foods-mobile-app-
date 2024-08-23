@@ -4,9 +4,9 @@ import { useSegments } from 'expo-router'
 import React from 'react'
 import { Pressable } from 'react-native'
 import orders from '@/assets/data/orders'
-import { Order } from '../types'
 import dayjs from 'dayjs'
 import Colors from '../constants/Colors'
+import { Order } from '../types'
 
 
 type OrderListItemProps = {
@@ -15,12 +15,23 @@ type OrderListItemProps = {
 
 const OrderListItem = ({order}: OrderListItemProps) => {
     const segments = useSegments();
+    console.log(segments)
+    const statusColors = (orderVal : string) => {
+        if (orderVal == 'DELIVERED') {
+            return "green";
+        } else if ( orderVal == "COOKING") {
+            return 'darkgoldenrod';
+        } else {
+            return Colors.light.tint;
+        }
+    }
+    console.log(order.id)
   return (
     <Link href={`../../${segments[1]}/${order.id}`} asChild>
     <Pressable style={styles.container}>
         <Text style={styles.textOrder}>Order #{order.id}</Text>
         <Text style={styles.timeOrder}>{dayjs(order.created_at).hour()} hours ago</Text>
-        <Text style={[styles.statusOrder ,{ color : order.status == 'Delivered' ? 'green' : 'darkgoldenrod'}]}>{order.status}</Text>
+        <Text style={[styles.statusOrder ,{ color : statusColors(order.status)}]}>{order.status}</Text>
     </Pressable>
     </Link>
  )

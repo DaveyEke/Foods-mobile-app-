@@ -10,10 +10,11 @@ import { OrderItem } from '../types'
 import products from '@/assets/data/products'
 import { defaultPizzaImage } from './ProductListItem'
 import Colors from '../constants/Colors'
+import { Tables } from '../database.types'
 
 
 type OrderListItemProps = {
-    orderItem : OrderItem
+    orderItem : Tables<'order_items'>
 }
 
 const OrderItemListItem = ({orderItem}: OrderListItemProps) => {
@@ -31,7 +32,7 @@ const OrderItemListItem = ({orderItem}: OrderListItemProps) => {
       <Text style={styles.quantityText}>{orderItem.quantity}</Text>
     </View>
  )
-}
+} 
 
 const styles = StyleSheet.create({
 container : {

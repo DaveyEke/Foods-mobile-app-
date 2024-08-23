@@ -12,6 +12,10 @@ import { PizzaSize } from '@/src/types';
 import { router } from 'expo-router';
 import { Link } from 'expo-router';
 import { ActivityIndicator } from 'react-native';
+import LoadingAnimation from '@/src/components/loadinganimation';
+import RemoteImage from '@/src/components/RemoteImages';
+
+
 
 
 
@@ -35,7 +39,7 @@ const ProductDetailsScreen = () => {
   };
   
   if (isLoading) {
-    return <ActivityIndicator />;
+    return <LoadingAnimation text="Fetching" />;
    }
    if (error) {
     Alert.alert("Error","Failed to fetch products")
@@ -47,8 +51,9 @@ const ProductDetailsScreen = () => {
   return (
     <View style={styles.container}>
       <Stack.Screen  options={{ title: product.name}}/>
-      <Image 
-      source={{ uri: product.image || defaultPizzaImage }} 
+      <RemoteImage 
+      path = {product.image || undefined} 
+      fallback= {defaultPizzaImage}
       style={styles.image}
       />
 

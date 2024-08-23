@@ -9,17 +9,28 @@ import { FlatList } from 'react-native'
 import { Order } from '@/src/types'
 import products from '@/assets/data/products'
 import OrderItemListItem from '@/src/components/OrderItemListItem'
+import { useOrderDetails } from '@/src/api/orders'
+import LoadingAnimation from '@/src/components/loadinganimation'
+import { useUpdateOrderSubscription } from '@/src/api/orders/subscriptions'
 
 
 const OrderItemScreen = () => {
-  const { id } = useLocalSearchParams()
-  const order:any = orders.find((o) => o.id.toString() === id);
+  const { id : idString } = useLocalSearchParams()
+  const id = parseFloat(typeof idString === 'string' ? idString : idString[0]);
+  // const order:any = orders.find((o) => o.id.toString() === id);
+  const {data: order , isLoading ,error} = useOrderDetails(id);
+  useUpdateOrderSubscription(id);
+ 
   const orderItems = order?.order_items
-   if(!order){
-    Alert.alert("Something is Wrong")
-   } else {
-    //  Alert.alert("Success" , `Order with id :  ${order.id} was retrieved successfully!`)
-   }
+
+  if (isLoading){
+    return <LoadingAnimation  text="Fetching..."/>
+  }
+
+  if (error){
+    Alert.alert("Error", error.message)
+  }
+
   return (
     <>
     <View style={styles.container}>
