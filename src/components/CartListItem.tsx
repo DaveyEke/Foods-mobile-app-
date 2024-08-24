@@ -6,6 +6,7 @@ import { Link } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';
 import { useCart } from '../providers/CartProvider';
 import { defaultPizzaImage } from './ProductListItem';
+import RemoteImage from './RemoteImages';
 
 type CartListItemProps = {
   cartItem: CartItem;
@@ -15,10 +16,11 @@ const CartListItem = ({ cartItem }: CartListItemProps) => {
   const { updateQuantity } = useCart();
   return (
     <View style={styles.container}>
-      <Image
-        source={{ uri: cartItem.product.image || defaultPizzaImage }}
+        <RemoteImage 
+        path ={cartItem.product.image || undefined}
+        fallback='https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png'
         style={styles.image}
-        resizeMode="contain"
+        resizeMode='contain'
       />
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>{cartItem.product.name}</Text>
@@ -61,6 +63,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     alignSelf: 'center',
     marginRight: 10,
+    borderRadius: 40
   },
   title: {
     fontWeight: '500',

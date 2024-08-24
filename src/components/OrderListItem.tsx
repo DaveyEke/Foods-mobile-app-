@@ -7,6 +7,7 @@ import orders from '@/assets/data/orders'
 import dayjs from 'dayjs'
 import Colors from '../constants/Colors'
 import { Order } from '../types'
+import { supabase } from '../lib/supabase'
 
 
 type OrderListItemProps = {

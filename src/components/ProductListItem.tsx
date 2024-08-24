@@ -4,6 +4,7 @@ import Colors from '../constants/Colors';
 import { Link, useSegments } from 'expo-router';
 import { Redirect } from 'expo-router';
 import RemoteImage from './RemoteImages';
+import { supabase } from '../lib/supabase';
 
 
 

@@ -11,6 +11,7 @@ import products from '@/assets/data/products'
 import { defaultPizzaImage } from './ProductListItem'
 import Colors from '../constants/Colors'
 import { Tables } from '../database.types'
+import RemoteImage from './RemoteImages'
 
 
 type OrderListItemProps = {
@@ -21,10 +22,11 @@ const OrderItemListItem = ({orderItem}: OrderListItemProps) => {
     const segments = useSegments();
   return (
     <View style={styles.container}>
-      <Image 
-        source={{ uri : orderItem.products.image || defaultPizzaImage}}
+      <RemoteImage 
+        path ={orderItem.products.image || undefined}
+        fallback='https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png'
         style={styles.image}
-        
+        resizeMode='contain'
       />
       <Text style={styles.nameText}>{orderItem.products.name}</Text>
       <Text style={styles.priceText}>${orderItem.products.price}</Text>
@@ -68,6 +70,7 @@ sizeText : {
   position : 'absolute',
   paddingLeft : 185,
   paddingTop: 60,
+  marginLeft : 20
 },
 quantityText : {
   alignSelf : 'flex-end',

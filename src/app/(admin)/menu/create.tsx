@@ -109,7 +109,8 @@ const CreateProductScreen = () => {
     setErrors('')
   };
 
-  const onUpdate = () => {
+  const onUpdate = async () => {
+    const imagePath = await uploadImage();
     Alert.alert(`${errors}`)
     if (!validateInput()) {
       return;
@@ -117,7 +118,7 @@ const CreateProductScreen = () => {
     Alert.alert(`Updating Product...${name} with Price $${price}`)
     // save in the database 
     updateProduct(
-      {id , name , price: parseFloat(price), image} , {
+      {id , name , price: parseFloat(price), image : imagePath} , {
         onSuccess: () => {
           resetFileds();
           Alert.alert("Success", "This product has been updated successfully")
