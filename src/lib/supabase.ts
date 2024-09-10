@@ -15,8 +15,10 @@ const ExpoSecureStoreAdapter = {
   },
 };
 
-const supabaseUrl = 'https://ecbjglcrgncwzecmqmna.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVjYmpnbGNyZ25jd3plY21xbW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM3MjU4MjksImV4cCI6MjAzOTMwMTgyOX0.ilygg6sJ94yQEQY97rtQqBMjY_RAVCkTD90Fko96ccU';
+const supabaseUrl = 'https://74df-2c0f-2a80-df-5a10-d3f-5532-e4f2-739a.ngrok-free.app';
+// https://ecbjglcrgncwzecmqmna.supabase.co
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVjYmpnbGNyZ25jd3plY21xbW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM3MjU4MjksImV4cCI6MjAzOTMwMTgyOX0.ilygg6sJ94yQEQY97rtQqBMjY_RAVCkTD90Fko96ccU';
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {

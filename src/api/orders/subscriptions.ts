@@ -23,7 +23,7 @@ export const useInsertOrderSubscription = () => {
       return () => {
         ordersSubscription.unsubscribe();
       }
-    })
+    } , [])
   
 }
 
