@@ -9,23 +9,20 @@ const profile = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Profile</Text>
-      <Button style={styles.buttonStyle} text="SignOut" onPress={()=>supabase.auth.signOut()}/>
+      <Button textstyle={{ alignSelf : 'center' , margin : 100 , backgroundColor : 'red'}} text="Sign Out" onPress={()=>supabase.auth.signOut()}/>
     </View>
   )
 }
 
 
 const styles = StyleSheet.create({
-    buttonStyle : {
-        alignSelf : 'center',
-        margin: 10
-    },
     container : {
         backgroundColor : 'white',
-        flex: 1
+        flex: 1,
+        justifyContent: 'center'
     },
     text : {
-        color : 'green'
+        color : 'green',
     }
 })
 
