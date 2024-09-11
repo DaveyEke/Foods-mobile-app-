@@ -6,6 +6,8 @@ import { Alert } from 'react-native';
 import { useInsertOrder } from '../api/orders';
 import { router, Router } from 'expo-router';
 import { useInsertOrderItems } from '../api/order-item';
+import { initializePaymentSheet } from '../lib/stripe';
+import { openPaymentSheet } from '../lib/stripe';
 
 type Product = Tables<'products'>
 
@@ -66,7 +68,12 @@ const CartProvider = ({ children }: PropsWithChildren) => {
         setItems([])
     }
 
-    const checkout = () => {
+    const checkout = async () => {
+        await initializePaymentSheet(Math.floor(total * 100))
+        const payed = await openPaymentSheet();
+        if (!payed){
+            return;
+        }
         insertOrder({ total } , {
            onSuccess : saveOrderItems,
         }) 
