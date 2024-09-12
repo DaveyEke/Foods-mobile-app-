@@ -15,7 +15,7 @@ const ExpoSecureStoreAdapter = {
   },
 };
 
-const supabaseUrl = 'https://746e-102-90-67-222.ngrok-free.app';
+const supabaseUrl = 'https://8089-197-210-79-149.ngrok-free.app';
 // https://ecbjglcrgncwzecmqmna.supabase.co
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVjYmpnbGNyZ25jd3plY21xbW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM3MjU4MjksImV4cCI6MjAzOTMwMTgyOX0.ilygg6sJ94yQEQY97rtQqBMjY_RAVCkTD90Fko96ccU';

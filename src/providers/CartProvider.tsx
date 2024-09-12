@@ -8,6 +8,7 @@ import { router, Router } from 'expo-router';
 import { useInsertOrderItems } from '../api/order-item';
 import { initializePaymentSheet } from '../lib/stripe';
 import { openPaymentSheet } from '../lib/stripe';
+import LoadingAnimation from '../components/loadinganimation';
 
 type Product = Tables<'products'>
 
@@ -19,6 +20,7 @@ type CartType= {
     checkout: () => void
   }
 
+  
 const CartContext = createContext<CartType>({
     items: [],
     addItem: () => {},
@@ -32,9 +34,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     const { mutate : insertOrder , isSuccess } = useInsertOrder();
     const { mutate: insertOrderItems } = useInsertOrderItems();
 
-    const [ items , setItems]  =useState<CartItem[]>([]);
-
-    const addItem = (product: Product , size:CartItem['size']) => {
+    const [ items , setItems]  =useState<CartItem[]>([]);    const addItem = (product: Product , size:CartItem['size']) => {
         // if already in  cart , increment quantity 
         const existingItem = items.find((item)=> item.product === product && item.size === size);
 
@@ -71,9 +71,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     const checkout = async () => {
         await initializePaymentSheet(Math.floor(total * 100))
         const payed = await openPaymentSheet();
-        if (!payed){
-            return;
-        }
+        if (!payed) return;
         insertOrder({ total } , {
            onSuccess : saveOrderItems,
         }) 
