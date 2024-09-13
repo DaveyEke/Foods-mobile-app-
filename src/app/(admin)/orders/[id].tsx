@@ -25,7 +25,9 @@ const OrderItemScreen = () => {
 
   const updateStatus = (status: string) => {
     updateOrder({ id: id , updatedFields : {status}})
-  }
+
+    console.log('Notify ' , order?.user_id)
+  };
   
   const orderItems = order?.order_items
 
