@@ -24,7 +24,7 @@ const NotificationProvider = ({children} : PropsWithChildren) => {
       const responseListener = useRef<Notifications.Subscription>();
     
       const savePushToken = async (newToken: string) => {
-        console.log(newToken)
+       // console.log(newToken)
         setExpoPushToken(newToken);
         if (!newToken) return;
         // update the token in the database
@@ -32,6 +32,7 @@ const NotificationProvider = ({children} : PropsWithChildren) => {
         .from("profiles")
         .update({expo_push_token : newToken})
         .eq('id', profile.id)
+        
       }
 
     useEffect(()=>{

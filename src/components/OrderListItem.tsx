@@ -26,7 +26,7 @@ const OrderListItem = ({order}: OrderListItemProps) => {
             return Colors.light.tint;
         }
     }
-    console.log(order.id)
+   // console.log(order.id)
   return (
     <Link href={`../../${segments[1]}/${order.id}`} asChild>
     <Pressable style={styles.container}>

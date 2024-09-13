@@ -14,6 +14,7 @@ import { OrderStatusList } from '@/src/types'
 import Colors from '@/src/constants/Colors'
 import { useOrderDetails, useUpdateOrder } from '@/src/api/orders'
 import LoadingAnimation from '@/src/components/loadinganimation'
+import { notifyUserAboutOrderUpdate } from '@/src/lib/notifications'
 
 
 const OrderItemScreen = () => {
@@ -23,10 +24,15 @@ const OrderItemScreen = () => {
   const {data: order , isLoading ,error} = useOrderDetails(id);
   const {mutate : updateOrder  } = useUpdateOrder();
 
-  const updateStatus = (status: string) => {
-    updateOrder({ id: id , updatedFields : {status}})
-
-    console.log('Notify ' , order?.user_id)
+  const updateStatus = async (status: string) => {
+      updateOrder({ id: id , updatedFields : {status}})
+    
+    if (order){
+      await notifyUserAboutOrderUpdate({...order , status})
+    } else {
+      Alert.alert("Error" , "Order Undefined")
+    }
+    
   };
   
   const orderItems = order?.order_items
