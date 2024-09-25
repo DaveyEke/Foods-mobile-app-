@@ -7,12 +7,14 @@ import { CartItem } from '../types';
 import { useInsertOrder } from '../api/orders';
 import CartListItem from '../components/CartListItem';
 import Button from '../components/Button';
+import LoadingAnimation from '../components/loadinganimation';
 
 
 
 
 const CartScreen = () => {
-    const { items , total , checkout } = useCart();
+    const { items , total , checkout ,loading} = useCart();
+
   return (
     <View style={{ padding: 10 }}>
       <FlatList
@@ -21,7 +23,7 @@ const CartScreen = () => {
       contentContainerStyle={{ padding: 10, gap:10 }}
       />
   <Text style={{ marginTop:20 ,fontSize:20, fontWeight:'500'}}> Total : ${total.toFixed(4)}</Text>
-    <Button onPress={checkout} text="Checkout" />
+    <Button onPress={checkout} disabled={loading != false} text={ loading == true ? "Fetching Payment Sheet..." : "Checkout"}/>
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </View>
   )

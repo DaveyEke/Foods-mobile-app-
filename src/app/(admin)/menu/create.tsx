@@ -22,6 +22,7 @@ import LoadingAnimation from '@/src/components/loadinganimation'
 
 
 
+
 const CreateProductScreen = () => {
   
 

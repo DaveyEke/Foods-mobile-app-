@@ -43,7 +43,7 @@ export async function registerForPushNotificationsAsync() {
         handleRegistrationError(`${e}`);
       }
     } else {
-      handleRegistrationError('Must use physical device for push notifications');
+       // handleRegistrationError('Must use physical device for push notifications');
     }
   }
 
@@ -91,7 +91,7 @@ const getUserToken = async (userId : string) => {
   return "Your Order just arrived and its about to be cooked"
  } 
  return "Your order has been Delivered , check in front!"
-}
+};
 
 export const notifyUserAboutOrderUpdate = async (order : Tables<'orders'>) => {
   const token =  await getUserToken(order.user_id || "");

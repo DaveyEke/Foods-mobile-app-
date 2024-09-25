@@ -17,7 +17,8 @@ type CartType= {
     addItem:(product: Product , size: CartItem['size']) => void;
     updateQuantity: (itemId: string , amount: -1 | 1) => void ;
     total: number,
-    checkout: () => void
+    checkout: () => void ,
+    loading : boolean 
   }
 
   
@@ -26,15 +27,16 @@ const CartContext = createContext<CartType>({
     addItem: () => {},
     updateQuantity : () => {},
     total: 0, 
-    checkout : () => {}
+    checkout : () => {},
+    loading : false
 });
 
 const CartProvider = ({ children }: PropsWithChildren) => {
-
     const { mutate : insertOrder , isSuccess } = useInsertOrder();
     const { mutate: insertOrderItems } = useInsertOrderItems();
-
-    const [ items , setItems]  =useState<CartItem[]>([]);    const addItem = (product: Product , size:CartItem['size']) => {
+    const [ items , setItems]  =useState<CartItem[]>([]); 
+    const [ loading , setLoading ] = useState(false)    
+    const addItem = (product: Product , size:CartItem['size']) => {
         // if already in  cart , increment quantity 
         const existingItem = items.find((item)=> item.product === product && item.size === size);
 
@@ -69,12 +71,17 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     }
 
     const checkout = async () => {
+        setLoading(true)
+        try {
         await initializePaymentSheet(Math.floor(total * 100))
         const payed = await openPaymentSheet();
         if (!payed) return;
-        insertOrder({ total } , {
-           onSuccess : saveOrderItems,
-        }) 
+        } finally {
+            insertOrder({ total} , {
+                onSuccess : saveOrderItems 
+             }) 
+             setLoading(false)
+        }
     }
 
     const saveOrderItems = (order : Tables<'orders'>) => {
@@ -101,10 +108,11 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     }
 
     return (
-        <CartContext.Provider value={{ items, addItem , updateQuantity, total , checkout }}>
+        <CartContext.Provider value={{ items, addItem , updateQuantity, total , checkout , loading }}>
             {children}
         </CartContext.Provider>
     )
+
 }
 
 export default CartProvider;
