@@ -3,10 +3,18 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Redirect, Tabs } from 'expo-router';
 import { Pressable } from 'react-native';
 import { useAuth } from '@/src/providers/AuthProvider';
-
+import { supabase } from '@/src/lib/supabase';
 import Colors from '@/src/constants/Colors';
 import { useColorScheme } from '@/src/components/useColorScheme';
 import { useClientOnlyValue } from '@/src/components/useClientOnlyValue';
+import { Image } from 'react-native';
+import { Alert } from 'react-native';
+import { signOutUser } from '@/src/api/sign-out';
+import { Session } from "@supabase/supabase-js";
+import { Profile } from '@/src/types';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import LoadingAnimation from '@/src/components/loadinganimation';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -18,11 +26,46 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { session }  = useAuth();
+  const { session  }  = useAuth();
+  const [userEmail , setUserEmail] = useState("");
+  const [loading, setLoading]  = useState(true);
 
+  useEffect(()=>{
+    if (session){
+      const fetchUser = async () => {
+      const { data : { user}  } = await supabase.auth.getUser()
+          setUserEmail(user?.email || "")
+      }
+      fetchUser()
+    } 
+  },[session])
+ 
+  const onSignOut = () => {
+    signOutUser(true)
+  }
+
+  const loginInfo = () => {
+    Alert.alert("You're currently signed in as", `${userEmail}`)
+  }
+  const confirmSignOut = () => {
+    Alert.alert("Confirm","Are you sure you want to Sign Out?", [
+      {
+        text: 'Cancel'
+      }, 
+      {
+        text: 'Sign Out',
+        style:'destructive',
+        onPress:onSignOut,
+      }
+    ]);
+  };
+
+  
+  console.log(userEmail)
   if (!session) {
     return <Redirect href={'/'}  />
   }
+
   return (
     <Tabs
       screenOptions={{
@@ -65,12 +108,38 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
       />
+
       <Tabs.Screen
       // Pixel 8 Pro API TiramisuPrivacySandbox
         name="profile"
         options={{
-          title: 'Profile',
+          title: "Profile",
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          headerTitle : userEmail,
+          headerRight: () => (
+              <Pressable onPress={confirmSignOut}>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name="sign-out"
+                    size={25}
+                    color={'red'}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  /> 
+                )}
+              </Pressable>
+          ),
+          headerLeft: () => (
+            <Pressable onPress={loginInfo}>
+              {({ pressed }) => (
+                <FontAwesome
+                  name="info-circle"
+                  size={25}
+                  color={'black'}
+                  style={{ marginLeft: 15, opacity: pressed ? 0.5 : 1 }}
+                /> 
+              )}
+            </Pressable>
+        ),
         }}
       />
     </Tabs>
