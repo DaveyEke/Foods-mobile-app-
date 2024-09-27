@@ -1,6 +1,6 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Redirect, Tabs } from 'expo-router';
+import { Link, Redirect, Stack, Tabs } from 'expo-router';
 import { Pressable } from 'react-native';
 import { useAuth } from '@/src/providers/AuthProvider';
 import { supabase } from '@/src/lib/supabase';
@@ -44,11 +44,23 @@ export default function TabLayout() {
     signOutUser(true)
   }
 
-  const loginInfo = () => {
-    Alert.alert("You're currently signed in as", `${userEmail}`)
+  const profileEdit = () => {
+    return <Redirect href={'/(user)/modal'}/>
+  }
+
+  const moreInfo = () => {
+    Alert.alert("More", "Click the edit button to edit profile info.", [
+      {
+        text: 'Cancel'
+      }, 
+      {
+        text: 'Edit',
+        onPress:profileEdit,
+      }
+    ]);
   }
   const confirmSignOut = () => {
-    Alert.alert("Confirm","Are you sure you want to Sign Out?", [
+    Alert.alert("Confirm","Are you sure you want to sign out?", [
       {
         text: 'Cancel'
       }, 
@@ -76,7 +88,7 @@ export default function TabLayout() {
       }}>
 
        <Tabs.Screen name="index" options={{ href: null}} /> 
-       <Tabs.Screen name="two" options={{ href: null}} /> 
+       <Tabs.Screen name="modal" options={{ href: null}} /> 
       <Tabs.Screen
         name="menu"
         options={{
@@ -129,13 +141,13 @@ export default function TabLayout() {
               </Pressable>
           ),
           headerLeft: () => (
-            <Pressable onPress={loginInfo}>
+            <Pressable onPress={moreInfo}>
               {({ pressed }) => (
                 <FontAwesome
-                  name="info-circle"
+                  name="ellipsis-v"
                   size={25}
                   color={'black'}
-                  style={{ marginLeft: 15, opacity: pressed ? 0.5 : 1 }}
+                  style={{ marginLeft: 30, opacity: pressed ? 0.5 : 1 }}
                 /> 
               )}
             </Pressable>
