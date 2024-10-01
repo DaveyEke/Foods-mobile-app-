@@ -1,6 +1,6 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Redirect, Stack, Tabs } from 'expo-router';
+import { Link, Redirect, router, Stack, Tabs } from 'expo-router';
 import { Pressable } from 'react-native';
 import { useAuth } from '@/src/providers/AuthProvider';
 import { supabase } from '@/src/lib/supabase';
@@ -15,6 +15,7 @@ import { Profile } from '@/src/types';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import LoadingAnimation from '@/src/components/loadinganimation';
+import { Router } from 'expo-router';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -45,7 +46,9 @@ export default function TabLayout() {
   }
 
   const profileEdit = () => {
-    return <Redirect href={'/(user)/modal'}/>
+    return (
+      router.replace('/(user)/edit-profile')
+    )
   }
 
   const moreInfo = () => {
@@ -88,7 +91,7 @@ export default function TabLayout() {
       }}>
 
        <Tabs.Screen name="index" options={{ href: null}} /> 
-       <Tabs.Screen name="modal" options={{ href: null}} /> 
+       <Tabs.Screen name="edit-profile" options={{ href: null}}/> 
       <Tabs.Screen
         name="menu"
         options={{
@@ -141,10 +144,10 @@ export default function TabLayout() {
               </Pressable>
           ),
           headerLeft: () => (
-            <Pressable onPress={moreInfo}>
+            <Pressable onPress={moreInfo} >
               {({ pressed }) => (
                 <FontAwesome
-                  name="ellipsis-v"
+                  name="list"
                   size={25}
                   color={'black'}
                   style={{ marginLeft: 30, opacity: pressed ? 0.5 : 1 }}

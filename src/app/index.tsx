@@ -12,7 +12,7 @@ import Colors from '../constants/Colors'
 import { Platform } from 'react-native'
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react'
-
+import { PaperColors } from '../constants/PaperColors'
 const index = () => {
   const [loaded, error] = useFonts({
     PoppinsBold: require('../../assets/fonts/Poppins-Bold.ttf'),
@@ -48,8 +48,8 @@ export default index
 
 const styles = StyleSheet.create({
  container : {
-    backgroundColor : 'white',
-    flex : 1
+    flex : 1,
+    backgroundColor : "white"
  } , 
  buttonView : {
     paddingTop : 600,

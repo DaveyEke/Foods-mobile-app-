@@ -5,10 +5,11 @@ import { Link, Redirect } from 'expo-router';
 import { useAuth } from '../providers/AuthProvider';
 import { ActivityIndicator } from 'react-native';
 import { supabase } from '../lib/supabase';
-
+import { useTheme } from 'react-native-paper';
+import { useColorScheme } from 'react-native';
 const next = () => {
     const { session , loading , isAdmin }  = useAuth();
-
+    const theme = useTheme();
     if (loading) {
         return <ActivityIndicator />
     }
@@ -21,8 +22,9 @@ const next = () => {
         return <Redirect href={'/(user)'}/>
     }
    
+    
     return(
-        <View style={{ flex: 1 , justifyContent: 'center' , padding: 10}}>
+        <View style={{ flex: 1 , justifyContent: 'center' , padding: 10 , }}>
             <Link href={'/(user)'} asChild>
                 <Button text='User'/>
             </Link>

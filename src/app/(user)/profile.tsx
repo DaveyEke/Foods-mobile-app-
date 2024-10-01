@@ -1,4 +1,4 @@
-import { View, Text , Image, ScrollView } from 'react-native'
+import { View, Text , Image, ScrollView , Modal } from 'react-native'
 import { Alert } from 'react-native'
 import { supabase } from '@/src/lib/supabase'
 import { Link, Redirect } from 'expo-router'
@@ -11,11 +11,14 @@ import { decode } from 'base64-arraybuffer'
 import Colors from '@/src/constants/Colors'
 import { useState } from 'react'
 import { randomUUID } from 'expo-crypto'
+import { Pressable } from 'react-native'
 
 const profile = () => {
   const [image , setImage] = useState('')
+  const [modalVisible, setModalVisible] = useState(false);
   const defaultPFP = "https://ecbjglcrgncwzecmqmna.supabase.co/storage/v1/object/public/nopfp/nopfp.png?t=2024-09-27T10%3A02%3A29.606Z"
    // const defaultPFPString = defaultPFP.toString()
+   
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -41,7 +44,7 @@ const profile = () => {
     const filePath = `${randomUUID()}.png`;
     const contentType = 'image/png';
     const { data, error } = await supabase.storage
-      .from('product-images')
+      .from('display-pics')
       .upload(filePath, decode(base64), { contentType });
   
       console.log(error);
@@ -59,7 +62,10 @@ const profile = () => {
     source={{ uri : image == "" ? defaultPFP : image}} 
     resizeMode='contain'
     />
-    <Text onPress={pickImage} style={styles.text}>Select Image</Text>
+
+    
+    <Text style={styles.text}>Select Image</Text>
+  
     </View>
     </View>
     </ScrollView>
@@ -89,6 +95,7 @@ const styles = StyleSheet.create({
       paddingTop :  50,
       paddingBottom : 600
      },
+     
 })
 
 

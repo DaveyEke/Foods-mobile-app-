@@ -5,8 +5,7 @@ import { Link, useSegments } from 'expo-router';
 import { Redirect } from 'expo-router';
 import RemoteImage from './RemoteImages';
 import { supabase } from '../lib/supabase';
-
-
+import { useColorScheme } from 'react-native';
 
 
 export const defaultPizzaImage= "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png"
@@ -46,12 +45,11 @@ const styles = StyleSheet.create({
    
   },
   container: {
-    backgroundColor:'white',
+    backgroundColor: "white",
     padding:10,
     borderRadius:20,
     flex: 1,
-    maxWidth:'50%',
-
+    maxWidth:'50%'
   },
   title:{
     fontSize: 18,
