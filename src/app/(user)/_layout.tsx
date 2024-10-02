@@ -52,15 +52,7 @@ export default function TabLayout() {
   }
 
   const moreInfo = () => {
-    Alert.alert("More", "Click the edit button to edit profile info.", [
-      {
-        text: 'Cancel'
-      }, 
-      {
-        text: 'Edit',
-        onPress:profileEdit,
-      }
-    ]);
+    Alert.alert("You're Logged In as" , `${userEmail}`)
   }
   const confirmSignOut = () => {
     Alert.alert("Confirm","Are you sure you want to sign out?", [
@@ -147,7 +139,7 @@ export default function TabLayout() {
             <Pressable onPress={moreInfo} >
               {({ pressed }) => (
                 <FontAwesome
-                  name="list"
+                  name="info-circle"
                   size={25}
                   color={'black'}
                   style={{ marginLeft: 30, opacity: pressed ? 0.5 : 1 }}
